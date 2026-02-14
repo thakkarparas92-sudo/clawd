@@ -44,10 +44,8 @@
   const hasAndroid = () => !!(window.clawdbotCanvasA2UIAction && typeof window.clawdbotCanvasA2UIAction.postMessage === "function");
   const hasHelper = () => typeof window.clawdbotSendUserAction === "function";
   statusEl.innerHTML =
-    "Bridge: " +
-    (hasHelper() ? "<span class='ok'>ready</span>" : "<span class='bad'>missing</span>") +
-    " · iOS=" + (hasIOS() ? "yes" : "no") +
-    " · Android=" + (hasAndroid() ? "yes" : "no");
+    "Mode: <span class='ok'>Browser (standalone)</span> · " +
+    "Agent bridge: " + (hasHelper() ? "connected" : "not needed");
 
   window.addEventListener("clawdbot:a2ui-action-status", (ev) => {
     const d = ev && ev.detail || {};
@@ -68,9 +66,23 @@
     log(ok ? ("Sent action: " + name) : ("Failed to send action: " + name));
   }
 
-  document.getElementById("btn-hello").onclick = () => send("hello", "demo.hello");
-  document.getElementById("btn-time").onclick = () => send("time", "demo.time");
-  document.getElementById("btn-photo").onclick = () => send("photo", "demo.photo");
-  document.getElementById("btn-dalek").onclick = () => send("dalek", "demo.dalek");
+  // Standalone browser mode - no agent bridge needed
+  document.getElementById("btn-hello").onclick = () => {
+    log("👋 Hello! This canvas is working perfectly in your browser!");
+  };
+  
+  document.getElementById("btn-time").onclick = () => {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString() + " on " + now.toLocaleDateString();
+    log("🕐 Current time: " + timeStr);
+  };
+  
+  document.getElementById("btn-photo").onclick = () => {
+    log("📸 Photo feature! (In the full Clawdbot app, this would trigger your camera)");
+  };
+  
+  document.getElementById("btn-dalek").onclick = () => {
+    log("🤖 EXTERMINATE! EXTERMINATE! 👾");
+  };
 })();
 </script>
